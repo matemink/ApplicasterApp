@@ -1,5 +1,6 @@
-package android.igorkostenko.applicasterapp
+package android.igorkostenko.applicasterapp.view.ui
 
+import android.igorkostenko.applicasterapp.R
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
