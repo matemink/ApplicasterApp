@@ -23,10 +23,10 @@ class EmployeeEntriesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
-            CELL_TYPE_LINK -> LinkViewHolder(
+            CELL_TYPE_LINK -> ViewHolder(
                 ItemLinkBinding.inflate(inflater, parent, false)
             )
-            CELL_TYPE_VIDEO -> VideoViewHolder(
+            CELL_TYPE_VIDEO -> ViewHolder(
                 ItemVideoBinding.inflate(inflater, parent, false)
             )
             else -> throw Exception()
@@ -34,16 +34,11 @@ class EmployeeEntriesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) =
-        when (holder.itemViewType) {
-            CELL_TYPE_LINK -> (holder as LinkViewHolder).bind(items[position])
-            CELL_TYPE_VIDEO -> (holder as VideoViewHolder).bind(items[position])
-            else -> throw IllegalArgumentException("invalid viewType: ${holder.itemViewType}")
-        }
+        (holder as ViewHolder).bind(items[position])
 
     override fun getItemViewType(position: Int): Int = when {
         position == RecyclerView.NO_POSITION -> RecyclerView.INVALID_TYPE
-        // TODO
-        (items[position].type.value == "link") -> CELL_TYPE_LINK
+        (EntryMediaType.from(items[position].type.value) == EntryMediaType.LINK) -> CELL_TYPE_LINK
         else -> CELL_TYPE_VIDEO
     }
 
@@ -52,23 +47,30 @@ class EmployeeEntriesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         notifyDataSetChanged()
     }
 
-    class LinkViewHolder(private val binding: ViewDataBinding) :
+    class ViewHolder(private val binding: ViewDataBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(entry: Entry) {
             if (binding is ItemLinkBinding) {
                 binding.entry = entry
+                binding.imageUrl =
+                    entry.media_group.firstOrNull()?.media_item?.firstOrNull()?.src.orEmpty()
+            }
+            if (binding is ItemVideoBinding) {
+                binding.entry = entry
+                binding.imageUrl =
+                    entry.media_group.firstOrNull()?.media_item?.firstOrNull()?.src.orEmpty()
             }
             binding.executePendingBindings()
         }
     }
 
-    class VideoViewHolder(private val binding: ViewDataBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        fun bind(entry: Entry) {
-            if (binding is ItemVideoBinding) {
-                binding.entry = entry
-            }
-            binding.executePendingBindings()
+    private enum class EntryMediaType(val value: String) {
+        LINK("link"),
+        VIDEO("video");
+
+        companion object {
+            fun from(value: String): EntryMediaType? =
+                values().find { it.value == value }
         }
     }
 }
