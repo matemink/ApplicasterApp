@@ -4,4 +4,5 @@ An application built with Clean Architecture + MVI approaches
 Courutines for asynchrony
 
 To build application you have to open it in Android Studio 4.0+ and press Run 'app' button
+
 To run tests you have open MainInteractorTest.kt test file and press Run test button
