@@ -19,7 +19,7 @@ import org.junit.Test
 import org.mockito.Mockito.verify
 
 @ExperimentalCoroutinesApi
-class MainViewModelTest {
+class MainInteractorTest {
     private lateinit var viewModel: MainViewModel
     private lateinit var employeeLinksInteractor: EmployeeLinksInteractor
     private lateinit var employeeVideosInteractor: EmployeeVideosInteractor
