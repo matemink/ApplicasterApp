@@ -7,10 +7,13 @@ import android.igorkostenko.applicasterapp.view.ui.details.VideoActivity
 import android.igorkostenko.applicasterapp.view.ui.details.WebViewActivity
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 
-class EmployeeEntriesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class EmployeeEntriesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(), Filterable {
+    private var filteredItems = mutableListOf<Entry>()
     private val items = mutableListOf<Entry>()
 
     companion object {
@@ -19,7 +22,7 @@ class EmployeeEntriesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-        return items.size
+        return filteredItems.size
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -36,16 +39,17 @@ class EmployeeEntriesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) =
-        (holder as ViewHolder).bind(items[position])
+        (holder as ViewHolder).bind(filteredItems[position])
 
     override fun getItemViewType(position: Int): Int = when {
         position == RecyclerView.NO_POSITION -> RecyclerView.INVALID_TYPE
-        (EntryMediaType.from(items[position].type.value) == EntryMediaType.LINK) -> CELL_TYPE_LINK
+        (EntryMediaType.from(filteredItems[position].type.value) == EntryMediaType.LINK) -> CELL_TYPE_LINK
         else -> CELL_TYPE_VIDEO
     }
 
     fun updateList(list: List<Entry>) {
         items.addAll(list)
+        filteredItems = items
         notifyDataSetChanged()
     }
 
@@ -93,6 +97,34 @@ class EmployeeEntriesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         companion object {
             fun from(value: String): EntryMediaType? =
                 values().find { it.value == value }
+        }
+    }
+
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun performFiltering(constraint: CharSequence?): FilterResults {
+                val charSearch = constraint.toString()
+                filteredItems = if (charSearch.isEmpty()) {
+                    items
+                } else {
+                    val resultList = mutableListOf<Entry>()
+                    for (entry in items) {
+                        if (entry.title.contains(charSearch)) {
+                            resultList.add(entry)
+                        }
+                    }
+                    resultList
+                }
+                val filterResults = FilterResults()
+                filterResults.values = filteredItems
+                return filterResults
+            }
+
+            @Suppress("UNCHECKED_CAST")
+            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                filteredItems = results?.values as ArrayList<Entry>
+                notifyDataSetChanged()
+            }
         }
     }
 }

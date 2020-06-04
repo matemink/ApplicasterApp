@@ -8,8 +8,10 @@ import android.igorkostenko.applicasterapp.view.adapter.EmployeeEntriesAdapter
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.viewmodel.ext.android.getViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -49,6 +51,17 @@ class MainActivity : AppCompatActivity() {
                 is EmployeeVideosInteractor.EmployeeEntriesState.Error -> {
                     Toast.makeText(this, it.error, Toast.LENGTH_LONG).show()
                 }
+            }
+        })
+
+        search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                adapter.filter.filter(newText)
+                return false
             }
         })
     }
