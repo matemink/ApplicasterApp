@@ -34,7 +34,7 @@ class EmployeeEntriesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(), 
             CELL_TYPE_VIDEO -> ViewHolder(
                 ItemVideoBinding.inflate(inflater, parent, false)
             )
-            else -> throw Exception()
+            else -> throw IllegalArgumentException()
         }
     }
 
@@ -90,16 +90,6 @@ class EmployeeEntriesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(), 
         }
     }
 
-    private enum class EntryMediaType(val value: String) {
-        LINK("link"),
-        VIDEO("video");
-
-        companion object {
-            fun from(value: String): EntryMediaType? =
-                values().find { it.value == value }
-        }
-    }
-
     override fun getFilter(): Filter {
         return object : Filter() {
             override fun performFiltering(constraint: CharSequence?): FilterResults {
@@ -125,6 +115,16 @@ class EmployeeEntriesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(), 
                 filteredItems = results?.values as ArrayList<Entry>
                 notifyDataSetChanged()
             }
+        }
+    }
+
+    private enum class EntryMediaType(val value: String) {
+        LINK("link"),
+        VIDEO("video");
+
+        companion object {
+            fun from(value: String): EntryMediaType? =
+                values().find { it.value == value }
         }
     }
 }

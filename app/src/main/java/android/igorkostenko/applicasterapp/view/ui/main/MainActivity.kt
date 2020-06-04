@@ -53,7 +53,10 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+        setupListeners(adapter)
+    }
 
+    private fun setupListeners(adapter: EmployeeEntriesAdapter) {
         search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false

@@ -13,7 +13,7 @@ class EmployeeLinksInteractor(private val applicasterClient: ApplicasterClient) 
     suspend fun loadApplicasterEmployeeLinks(): MutableLiveData<EmployeeEntriesState> {
         val liveData =
             MutableLiveData<EmployeeEntriesState>().apply { EmployeeEntriesState.Loading }
-        withContext(Dispatchers.IO) {
+        return withContext(Dispatchers.IO) {
             applicasterClient.fetchEmployeesLinks { response ->
                 liveData.postValue(
                     when (response) {
@@ -25,8 +25,8 @@ class EmployeeLinksInteractor(private val applicasterClient: ApplicasterClient) 
                     }
                 )
             }
+            liveData
         }
-        return liveData
     }
 
     sealed class EmployeeEntriesState {
