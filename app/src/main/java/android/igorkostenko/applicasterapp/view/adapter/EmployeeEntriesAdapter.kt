@@ -3,6 +3,8 @@ package android.igorkostenko.applicasterapp.view.adapter
 import android.igorkostenko.applicasterapp.databinding.ItemLinkBinding
 import android.igorkostenko.applicasterapp.databinding.ItemVideoBinding
 import android.igorkostenko.applicasterapp.model.Entry
+import android.igorkostenko.applicasterapp.view.ui.details.VideoActivity
+import android.igorkostenko.applicasterapp.view.ui.details.WebViewActivity
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
@@ -51,14 +53,34 @@ class EmployeeEntriesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         RecyclerView.ViewHolder(binding.root) {
         fun bind(entry: Entry) {
             if (binding is ItemLinkBinding) {
-                binding.entry = entry
-                binding.imageUrl =
-                    entry.media_group.firstOrNull()?.media_item?.firstOrNull()?.src.orEmpty()
+                binding.apply {
+                    this.entry = entry
+                    imageUrl =
+                        entry.media_group.firstOrNull()?.media_item?.firstOrNull()?.src.orEmpty()
+                    root.setOnClickListener {
+                        root.context.startActivity(
+                            WebViewActivity.createIntent(
+                                binding.root.context,
+                                entry.link.href
+                            )
+                        )
+                    }
+                }
             }
             if (binding is ItemVideoBinding) {
-                binding.entry = entry
-                binding.imageUrl =
-                    entry.media_group.firstOrNull()?.media_item?.firstOrNull()?.src.orEmpty()
+                binding.apply {
+                    this.entry = entry
+                    imageUrl =
+                        entry.media_group.firstOrNull()?.media_item?.firstOrNull()?.src.orEmpty()
+                    button.setOnClickListener {
+                        root.context.startActivity(
+                            VideoActivity.createIntent(
+                                binding.root.context,
+                                entry.content.src
+                            )
+                        )
+                    }
+                }
             }
             binding.executePendingBindings()
         }

@@ -7,7 +7,7 @@
 
         <variable
             name="vm"
-            type="android.igorkostenko.applicasterapp.view.ui.MainViewModel" />
+            type="android.igorkostenko.applicasterapp.view.ui.main.MainViewModel" />
 
         <variable
             name="adapter"
@@ -17,7 +17,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".view.ui.MainActivity">
+        tools:context=".view.ui.main.MainActivity">
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"

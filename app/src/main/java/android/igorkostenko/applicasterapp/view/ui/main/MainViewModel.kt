@@ -1,4 +1,4 @@
-package android.igorkostenko.applicasterapp.view.ui
+package android.igorkostenko.applicasterapp.view.ui.main
 
 import android.igorkostenko.applicasterapp.LiveCoroutinesViewModel
 import android.igorkostenko.applicasterapp.interactor.EmployeeLinksInteractor
