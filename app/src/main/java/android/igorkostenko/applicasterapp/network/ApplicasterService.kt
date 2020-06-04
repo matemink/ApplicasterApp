@@ -7,8 +7,8 @@ import retrofit2.http.GET
 interface ApplicasterService {
 
     @GET("link_json.json")
-    fun fetchEmployeesLinkList(): Call<List<EmployeeEntries>>
+    fun fetchEmployeesLinkList(): Call<EmployeeEntries>
 
     @GET("video_json.json")
-    fun fetchEmployeesVideoList(): Call<List<EmployeeEntries>>
+    fun fetchEmployeesVideoList(): Call<EmployeeEntries>
 }

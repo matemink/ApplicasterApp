@@ -3,9 +3,6 @@ package android.igorkostenko.applicasterapp.di
 import android.igorkostenko.applicasterapp.BuildConfig
 import android.igorkostenko.applicasterapp.network.ApplicasterClient
 import android.igorkostenko.applicasterapp.network.ApplicasterService
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import kotlinx.serialization.json.Json
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
@@ -25,12 +22,10 @@ val networkModule = module {
     }
 
     single {
-        val contentType = "application/json".toMediaType()
         Retrofit.Builder()
             .client(get<OkHttpClient>())
             .baseUrl("http://assets-production.applicaster.com/applicaster-employees/israel_team/Elad/assignment/")
             .addConverterFactory(GsonConverterFactory.create())
-            .addConverterFactory(Json.asConverterFactory(contentType))
             .build()
     }
 
